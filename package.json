@@ -1,0 +1,24 @@
+{
+  "name": "oyeraautoservicebay",
+  "version": "1.0.0",
+  "description": "This is my backend journey",
+  "license": "ISC",
+  "author": "Mwesigwa Joshua",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node Routes/index.js",
+    "dev": "nodemon Routes/index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^5.2.1",
+    "express-validator": "^7.0.1",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "keywords": []
+}

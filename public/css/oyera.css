@@ -1,0 +1,342 @@
+body {
+  background-image: url("/images/garage.jpeg");
+  background-size: cover;
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+  overflow-x: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.18;
+  z-index: -2;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(96, 75, 75, 0.08);
+  z-index: -1;
+}
+
+.hero-shell {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-card {
+  width: min(1100px, 92vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.621);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 28px;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.hero-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.24);
+}
+
+.hero-copy {
+  text-align: left;
+}
+
+.hero-badge {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(13, 110, 253, 0.12);
+  color: #0b2c4d;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease,
+    text-shadow 0.25s ease;
+}
+
+#first-title {
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: #0b2c4d;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
+}
+
+#second-title {
+  margin-top: 0.9rem;
+  font-size: clamp(1.05rem, 2vw, 1.55rem);
+  font-weight: 500;
+  color: #23425f;
+}
+
+.title:hover {
+  transform: translateY(-4px);
+  color: #0d6efd;
+  text-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.hero-media {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    filter 0.35s ease;
+}
+
+.hero-image:hover {
+  transform: scale(1.03);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.34);
+  filter: saturate(1.08);
+}
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.glass-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 190px;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #0b2c4d;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.glass-btn:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+}
+
+.glass-btn-primary {
+  background: rgba(13, 110, 253, 0.18);
+  color: #0b2c4d;
+}
+
+.glass-btn-secondary {
+  background: rgba(255, 255, 255, 0.18);
+  color: #0b2c4d;
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(13, 110, 253, 0.65);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.2);
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 768px) {
+  .hero-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .hero-copy {
+    text-align: center;
+  }
+
+  .hero-badge {
+    margin-bottom: 0.8rem;
+  }
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.error-message {
+  color: #b42318;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+  min-height: 1.1rem;
+}
+
+input.invalid {
+  border: 1px solid #ff4d4d;
+  background-color: #ffe6e6;
+}
+
+#text-center text-muted {
+  font-size: 3rem;
+}
+
+.container {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+.customerDashboard {
+  background-image: url("/images/garage.jpeg");
+  background-size: cover;
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.login-container,
+.signup-container {
+  max-width: 520px;
+  width: 100%;
+  margin: 2rem auto;
+}
+.login-header,
+.auth-card {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.12);
+}
+.login-header h1,
+.auth-card h1,
+.auth-card h2 {
+  color: #0b2c4d;
+}
+.login-btn,
+.submit-btn {
+  display: inline-flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0.95rem 1.25rem;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(13, 110, 253, 0.95);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.login-btn:hover,
+.submit-btn:hover,
+.glass-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px rgba(0, 0, 0, 0.18);
+}
+.google-btn {
+  width: 100%;
+  gap: 0.75rem;
+  padding: 0.95rem 1rem;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #20232a;
+  font-weight: 700;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+.google-btn svg {
+  margin-right: 0.5rem;
+}
+.signup-link,
+.back-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+.signup-link a,
+.back-link a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+.signup-link a:hover,
+.back-link a:hover {
+  text-decoration: underline;
+}
+.form-control.invalid {
+  border-color: #d9534f;
+  background-color: rgba(255, 229, 229, 0.9);
+}
+.error-message {
+  color: #b42318;
+  font-size: 0.9rem;
+  min-height: 1.2rem;
+}
