@@ -54,14 +54,28 @@ if (sqlite3) {
 } else {
   // Simple JSON fallback to avoid native build requirements during development
   const fs = require("fs");
-  const usersFile = path.join(__dirname, "../data/users.json");
-  if (!fs.existsSync(usersFile))
-    fs.writeFileSync(usersFile, JSON.stringify([]));
+  const dataDir = path.join(__dirname, "../data");
+  const usersFile = path.join(dataDir, "users.json");
 
-  const readUsers = () =>
-    JSON.parse(fs.readFileSync(usersFile, "utf8") || "[]");
+  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  if (!fs.existsSync(usersFile))
+    fs.writeFileSync(usersFile, JSON.stringify([]), "utf8");
+
+  const readUsers = () => {
+    try {
+      return JSON.parse(fs.readFileSync(usersFile, "utf8") || "[]");
+    } catch (err) {
+      console.warn(
+        "Failed to read users.json, resetting storage:",
+        err.message,
+      );
+      fs.writeFileSync(usersFile, JSON.stringify([]), "utf8");
+      return [];
+    }
+  };
+
   const writeUsers = (arr) =>
-    fs.writeFileSync(usersFile, JSON.stringify(arr, null, 2));
+    fs.writeFileSync(usersFile, JSON.stringify(arr, null, 2), "utf8");
 
   db = {
     get(sql, params, cb) {
@@ -130,8 +144,8 @@ app.get("/customerSignUp", (req, res) => res.redirect("/auth"));
 app.get("/customerDashboard", (req, res) =>
   res.sendFile(path.join(htmlDir, "customerDashboard.html")),
 );
-app.get("/technicianLogin", (req, res) =>
-  res.sendFile(path.join(htmlDir, "technicianLogin.html")),
+app.get("/vulnerableLogin", (req, res) =>
+  res.sendFile(path.join(htmlDir, "vulnerableLogin.html")),
 );
 
 // Technician login - basic protected example, sanitized inputs
@@ -249,7 +263,7 @@ app.post("/customerDashboard", (req, res) => {
   });
 });
 
-app.post("/technicianLogin", (req, res) => {
+app.post("/vulnerableLogin", (req, res) => {
   console.log("Technician login accessed.");
   res.status(200).json({
     message: "Technician Login received successfully.",
