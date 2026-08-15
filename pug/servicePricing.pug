@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  - var title='Service Pricing | Oyera Auto Service Bay'
+  .page-shell
+    header.topbar
+      h1 Service Pricing
+    section.panel.mt-4
+      h3 Pricing Table
+      .table-responsive
+        table.table
+          thead
+            tr
+              th Service
+              th Category
+              th Labour
+              th Parts Range
+              th Total
+          tbody
+            tr
+              td(colspan='5', class='text-center text-muted') Pricing details will appear here.
+  script(src='/js/adminDashboard.js', defer)

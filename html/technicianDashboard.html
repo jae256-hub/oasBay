@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>admin dashboard</title>
+    <link rel="stylesheet" href="/css/oyera.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body action="technicianDashboard" method="POST">
+    <div class="shell">
+      <div class="sidebar">
+        <div class="brand">
+          <div class="brand-name">OAS Bay</div>
+          <div class="brand-sub">Technician Console</div>
+        </div>
+        <div class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">▣</span
+          ><span class="label-text">Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="records">
+          <span class="nav-icon">🗎</span
+          ><a href="/serviceRecords" class="label-text">Service Records</a>
+        </div>
+        <div class="nav-item" data-view="inventory">
+          <span class="nav-icon">📦</span
+          ><a href="/inventory" class="label-text">Inventory</a>
+        </div>
+        <div class="nav-item" data-view="users">
+          <span class="nav-icon">👤</span
+          ><a href="/userManagement" class="label-text">User Management</a>
+        </div>
+        <div class="nav-item" data-view="logs">
+          <span class="nav-icon">🕒</span
+          ><a href="/activityLogs" class="label-text">Activity Logs</a>
+        </div>
+        <div class="nav-item" data-view="pricing">
+          <span class="nav-icon">🏷</span
+          ><a href="/servicePricing" class="label-text">Service Pricing</a>
+        </div>
+        <div class="sidebar-foot label-text">
+          Oyera Auto Service Bay<br />v0.1 prototype
+        </div>
+      </div>
+
+      <div class="main">
+        <div class="topbar">
+          <h1 id="topbar-title">Technician Dashboard</h1>
+          <div class="right">
+            <span id="topbar-sub"> Sept 04 2026</span>
+            <span class="admin-chip">Techn ▾</span>
+          </div>
+        </div>
+
+        <div class="content">
+          <!-- ============ DASHBOARD ============ -->
+          <div class="view active" id="view-dashboard">
+            <div class="stat-row">
+              <div class="stat-card">
+                <div class="stat-label">Cars in Today</div>
+                <div class="stat-value">12</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Services Completed</div>
+                <div class="stat-value">8</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-value">Shs.20,000,000</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Active Technicians</div>
+                <div class="stat-value">5</div>
+              </div>
+            </div>
+
+            <div class="panel-row">
+              <div class="panel">
+                <div class="panel-head">Bay Status Overview</div>
+                <div class="panel-body" id="bay-status"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-head">Daily Revenue Chart</div>
+                <div class="chart-wrap">
+                  <svg id="revenue-chart" viewBox="0 0 320 170"></svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-row">
+              <div class="panel" style="grid-column: span 1">
+                <div class="panel-head">Technician Activity</div>
+                <div class="panel-body" style="padding: 0">
+                  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Technician</th>
+      <th scope="col">Specialty</th>
+      <th scope="col">Time allocation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">001</th>
+      <td>Ssali Lameck</td>
+      <td>Engine repair</td>
+      <td>Day</td>
+    </tr>
+    <tr>
+      <th scope="row">002</th>
+      <td>Mwesigwa Joseph</td>
+      <td>Engine repair</td>
+      <td>Night</td>
+    </tr>
+    <tr>
+      <th scope="row">003</th>
+      <td>Mukasa Christopher</td>
+      <td>Oil servicing</td>
+      <td>Day</td>
+    </tr>
+    <tr>
+      <th scope="row">004</th>
+      <td>Okello Mavis</td>
+      <td>Oil servicing</td>
+      <td>Night</td>
+    </tr>
+    <tr>
+      <th scope="row">005</th>
+      <td>Musinguzi Pedro</td>
+      <td>Wheel alignment & balancing</td>
+      <td>Day</td>
+    </tr>
+    <tr>
+      <th scope="row">006</th>
+      <td>Mutyaba Joshua</td>
+      <td>Wheel alignment & balancing</td>
+      <td>Night</td>
+    </tr>
+  </tbody id="tech-activity">
+</table>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="panel-head">Inventory Alerts</div>
+                <div class="panel-body" id="inv-alerts"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ SERVICE RECORDS ============ -->
+          <div class="view" id="view-records">
+            <div class="toolbar">
+              <input type="text" placeholder="Search by Car Plate..." />
+              <input type="text" placeholder="Search by Technician..." />
+              <input type="date" aria-label="From date" />
+              <span style="color: var(--muted); font-size: 12px">to</span>
+              <input aria-label="From date" type="date" />
+              <button class="btn">Filter</button>
+              <button class="btn ghost">Print</button>
+            </div>
+            <div class="stat-row" style="grid-template-columns: repeat(3, 1fr)">
+              <div class="stat-card">
+                <div class="stat-label">Total Cars Serviced</div>
+                <div class="stat-value">48</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-value">$12,450</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Pending Jobs</div>
+                <div class="stat-value">5</div>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Car ID</th>
+                      <th>Service Type</th>
+                      <th>Parts Used</th>
+                      <th>Technician</th>
+                      <th>Cost</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="records-table"></tbody>
+                </table>
+              </div>
+              <div class="panel">
+                <div class="panel-head">Service Details</div>
+                <div class="panel-body" id="record-details"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ INVENTORY ============ -->
+          <div class="view" id="view-inventory">
+            <div class="toolbar">
+              <input type="text" placeholder="Search by Part Name..." />
+              <select aria-label="Filter by Category">
+                <option>Oil</option>
+                <option>Filters</option>
+                <option>Parts</option>
+              </select>
+
+              <select aria-label="Filter by Supplier">
+                <option>Filter by Supplier...</option>
+              </select>
+              <input type="date" aria-label="From date" />
+              <span style="color: var(--muted); font-size: 12px">to</span>
+              <input type="date" aria-label="From date" />
+              <button class="btn ghost">Export</button>
+            </div>
+            <div class="stat-row" style="grid-template-columns: repeat(3, 1fr)">
+              <div class="stat-card">
+                <div class="stat-label">Total Items</div>
+                <div class="stat-value">320</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Low Stock Alerts</div>
+                <div class="stat-value">12</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Total Value</div>
+                <div class="stat-value">UGX 4,500,000</div>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Item Name</th>
+                      <th>Category</th>
+                      <th>Quantity</th>
+                      <th>Unit Price</th>
+                      <th>Supplier</th>
+                      <th>Last Restocked</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventory-table"></tbody>
+                </table>
+              </div>
+              <div class="panel">
+                <div class="panel-head">Item Details</div>
+                <div class="panel-body" id="inventory-details"></div>
+              </div>
+            </div>
+            <div class="foot-actions">
+              <button class="btn gold">Add New Item</button>
+              <button class="btn ghost">Update Stock</button>
+              <button class="btn ghost">Export Report</button>
+            </div>
+          </div>
+
+          <!-- ============ USER MANAGEMENT ============ -->
+          <div class="view" id="view-users">
+            <div class="toolbar">
+              <input type="text" placeholder="Search by Name..." />
+              <select aria-label="Filter by role">
+                <option>Filter by role....</option>
+                <option>Admin</option>
+                <option>Senior Technician</option>
+                <option>Technician</option>
+              </select>
+
+              <select aria-label="Filter by status">
+                <option>Filter by Status...</option>
+                <option>Active</option>
+                <option>Inactive</option>
+              </select>
+
+              <button class="btn">Filter</button>
+            </div>
+            <div class="stat-row" style="grid-template-columns: repeat(3, 1fr)">
+              <div class="stat-card">
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value">15</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Technicians</div>
+                <div class="stat-value">8</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Senior Technicians</div>
+                <div class="stat-value">4</div>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Role</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Last Login</th>
+                    </tr>
+                  </thead>
+                  <tbody id="users-table"></tbody>
+                </table>
+              </div>
+              <div class="panel">
+                <div class="panel-head">User Details</div>
+                <div class="panel-body" id="user-details"></div>
+              </div>
+            </div>
+            <div class="foot-actions">
+              <button class="btn gold">Add New User</button>
+              <button class="btn ghost">Edit Role</button>
+              <button class="btn ghost">Deactivate Account</button>
+              <button class="btn ghost">Export User List</button>
+            </div>
+          </div>
+
+          <!-- ============ ACTIVITY LOGS ============ -->
+          <div class="view" id="view-logs">
+            <div class="toolbar">
+              <input type="text" placeholder="Search by User Name..." />
+              <select aria-label="All roles">
+                <option>All Roles</option>
+                <option>Admin</option>
+                <option>Senior Technician</option>
+                <option>Technician</option>
+              </select>
+              <input type="date" aria-label="From date" />
+              <span style="color: var(--muted); font-size: 12px">to</span>
+              <input type="date" aria-label="From date" />
+              <button class="btn">Filter</button>
+            </div>
+            <div class="stat-row" style="grid-template-columns: repeat(3, 1fr)">
+              <div class="stat-card">
+                <div class="stat-label">Total Actions Today</div>
+                <div class="stat-value">85</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Technicians Active</div>
+                <div class="stat-value">5</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Senior Tech Approvals</div>
+                <div class="stat-value">12</div>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>User Name</th>
+                      <th>Role</th>
+                      <th>Action</th>
+                      <th>Affected Record</th>
+                      <th>Timestamp</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="logs-table"></tbody>
+                </table>
+              </div>
+              <div class="panel">
+                <div class="panel-head">Log Details</div>
+                <div class="panel-body" id="log-details"></div>
+              </div>
+            </div>
+            <div class="foot-actions">
+              <button class="btn ghost">Export Logs</button>
+              <button class="btn ghost">Clear Filters</button>
+              <button class="btn gold">View User Profile</button>
+            </div>
+          </div>
+
+          <!-- ============ SERVICE PRICING ============ -->
+          <div class="view" id="view-pricing">
+            <div class="toolbar">
+              <input type="text" placeholder="Search by Service Name..." />
+              <select aria-label="Filter by category">
+                <option>Filter by Category...</option>
+                <option>Maintenance</option>
+                <option>Repair</option>
+                <option>Alignment</option>
+                <option>Diagnostics</option>
+              </select>
+              <button class="btn">Filter</button>
+              <button class="btn gold">Add Service</button>
+              <button class="btn ghost">Export</button>
+            </div>
+            <div class="stat-row" style="grid-template-columns: repeat(3, 1fr)">
+              <div class="stat-card">
+                <div class="stat-label">Total Services</div>
+                <div class="stat-value">10</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Average Labour Charge</div>
+                <div class="stat-value">UGX 20,000</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">Last Updated</div>
+                <div class="stat-value" style="font-size: 18px">25/07/26</div>
+              </div>
+            </div>
+            <div class="content-grid">
+              <div class="panel">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Service Name</th>
+                      <th>Category</th>
+                      <th>Labour Charge</th>
+                      <th>Parts Cost Range</th>
+                      <th>Total Estimated Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody id="pricing-table"></tbody>
+                </table>
+              </div>
+              <div class="panel">
+                <div class="panel-head">Actions</div>
+                <div class="panel-body" id="pricing-details"></div>
+              </div>
+            </div>
+            <div class="foot-actions">
+              <button class="btn gold">Add New Service</button>
+              <button class="btn ghost">Edit Pricing</button>
+              <button class="btn ghost">Deactivate Service</button>
+              <button class="btn ghost">Export Pricing List</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/js/index.js" defer></script>
+    <script src="/js/technicianDashboard.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

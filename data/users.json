@@ -3,6 +3,7 @@
     "id": 1,
     "first_name": "Joshua",
     "surname": "Mwesigwa",
+    "role": "Admin",
     "email": "jmwesigwa272@gmail.com",
     "password": "$2a$10$Q6z9DbmCWGI79ut3KMjY9eyZQcxVOiu8mDDQjzdk1uX4epXW.XdhO",
     "telephone": "0762180290"

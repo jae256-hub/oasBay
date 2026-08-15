@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  - var title='User Management | Oyera Auto Service Bay'
+  .page-shell
+    header.topbar
+      h1 User Management
+    section.summary-cards
+      .summary-card
+        .label Total Users
+        .value#userCount 0
+      .summary-card
+        .label Admins
+        .value#adminCount 0
+      .summary-card
+        .label Technicians
+        .value#techCount 0
+    section.table-wrap.panel.mt-4
+      h3 Registered Users
+      .table-responsive
+        table.table.align-middle
+          thead
+            tr
+              th Name
+              th Email
+              th Phone
+              th Role
+              th Joined
+          tbody#usersTableBody
+            tr
+              td(colspan='5', class='text-center text-muted') Loading users...
+  script(src='/js/userManagement.js', defer)

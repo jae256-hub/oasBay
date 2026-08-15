@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  - var title='Service Records | Oyera Auto Service Bay'
+  .page-shell
+    header.topbar
+      h1 Service Records
+    section.summary-cards
+      .summary-card
+        .label Total Records
+        .value#recordCount 0
+      .summary-card
+        .label Completed
+        .value#completedCount 0
+      .summary-card
+        .label In Progress
+        .value#inProgressCount 0
+    section.table-wrap.panel.mt-4
+      h3 All Service Records
+      .table-responsive
+        table.table.align-middle
+          thead
+            tr
+              th ID
+              th Vehicle
+              th Service
+              th Technician
+              th Status
+              th Cost
+          tbody#recordsTableBody
+            tr
+              td.colspan='6' Loading records...
+  script(src='/js/serviceRecords.js', defer)

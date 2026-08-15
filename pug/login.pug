@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  - var title='Login | Oyera Auto Service Bay'
+  .auth-shell.login-container
+    .auth-card
+      .auth-header
+        h1.auth-title Welcome back
+        p.auth-subtitle Sign in to your account to continue
+      #loginMessage.mt-3.text-center.small.text-muted
+      form#loginForm.auth-form(novalidate)
+        .form-group.mb-3
+          label.form-label(for='emailOrPhone') Email or phone
+          input#emailOrPhone.auth-input.form-control(type='text', name='emailOrPhone', placeholder='you@example.com or +256...')
+          small#error.emailOrPhone-error.error-message
+        .form-group.mb-3
+          label.form-label(for='password') Password
+          input#password.auth-input.form-control(type='password', name='password', placeholder='Enter your password')
+          small#error.password-error.error-message
+        button.login-btn(type='submit') Login
+        .divider-or
+          span or
+        a.google-btn(href='/signUp') Create an account
+      .signup-link
+        a(href='/signUp') Need an account? Sign up
+  script(src='/js/login.js', defer)

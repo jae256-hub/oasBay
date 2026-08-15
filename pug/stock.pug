@@ -1,0 +1,65 @@
+extends layout
+
+block content
+    .container.mt-5
+        .row
+            .col-md-4
+                .card.p-4.shadow-sm
+                    h4.mb-3.fw-bold Register Stock
+                    form(action="/stock", method="POST")
+                    
+                        //- Item Name Dropdown (Error-Minimizing Select input)
+                        .mb-3
+                            label.form-label Item Name
+                            select.form-select#itemNameSelect(name="itemName", required)
+                                option(value="" disabled selected) Select an item...
+                                
+                                optgroup(label="Engine Oils")
+                                    option(value="Engine Oil - 5W-30 (Synthetic)", data-category="Engine Oil") Engine Oil - 5W-30 (Synthetic)
+                                    option(value="Engine Oil - 5W-40 (Synthetic)", data-category="Engine Oil") Engine Oil - 5W-40 (Synthetic)
+                                    option(value="Engine Oil - 10W-40 (Semi-Synthetic)", data-category="Engine Oil") Engine Oil - 10W-40 (Semi-Synthetic)
+                                    option(value="Engine Oil - 15W-40 (Mineral)", data-category="Engine Oil") Engine Oil - 15W-40 (Mineral)
+
+                                optgroup(label="Gearbox Oils")
+                                    option(value="Gearbox Oil - ATF Fluid", data-category="Gearbox Oil") Gearbox Oil - ATF Fluid
+                                    option(value="Gearbox Oil - CVT Fluid", data-category="Gearbox Oil") Gearbox Oil - CVT Fluid
+                                    option(value="Gearbox Oil - 75W-90", data-category="Gearbox Oil") Gearbox Oil - 75W-90
+                                
+                                optgroup(label="Filters")
+                                    option(value="Oil Filter", data-category="Filters") Oil Filter
+                                    option(value="Air Filter", data-category="Filters") Air Filter
+                                    option(value="Fuel Filter", data-category="Filters") Fuel Filter
+                                    option(value="Gearbox Filter", data-category="Filters") Gearbox Filter
+                                
+                                optgroup(label="Brake Fluids")
+                                    option(value="Brake Fluid - DOT 3", data-category="Brake Fluid") Brake Fluid - DOT 3
+                                    option(value="Brake Fluid - DOT 4", data-category="Brake Fluid") Brake Fluid - DOT 4
+                                
+                                optgroup(label="Other Parts & Maintenance")
+                                    option(value="Front Brake Pads", data-category="Other") Front Brake Pads
+                                    option(value="Rear Brake Pads", data-category="Other") Rear Brake Pads
+                                    option(value="Wheel Bearing Grease", data-category="Other") Wheel Bearing Grease
+                                    option(value="All-Purpose Grease", data-category="Other") All-Purpose Grease
+
+                        //- Category Dropdown (Automatically controlled by JavaScript below)
+                        .mb-3
+                            label.form-label Category
+                            select.form-select#categorySelect(name="category", required)
+                                option(value="" disabled selected) Select a category...
+                                option(value="Filters") Filters
+                                option(value="Engine Oil") Engine Oil
+                                option(value="Gearbox Oil") Gearbox Oil
+                                option(value="Brake Fluid") Brake Fluid
+                                option(value="Other") Other
+
+                        .mb-3
+                            label.form-label Price (UGX)
+                            input.form-control(type="number", name="price", placeholder="e.g., 85000", required)
+                        
+                        .mb-3
+                            label.form-label Quantity Received
+                            input.form-control(type="number", name="quantity", placeholder="e.g., 10", required)
+                        
+                        button.btn.btn-warning.w-100.fw-bold(type="submit") Add to Stock
+                        
+            

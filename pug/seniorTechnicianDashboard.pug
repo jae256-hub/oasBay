@@ -1,0 +1,113 @@
+extends layout
+
+block content
+  - var title='Senior Technician Dashboard | Oyera Auto Service Bay'
+  .shell
+    aside.sidebar
+      .brand
+        .brand-name OAS Bay
+        .brand-sub Senior Tech Console
+      .nav-item.active(data-view='dashboard')
+        span.nav-icon ▣
+        span.label-text Dashboard
+      .nav-item
+        span.nav-icon 🗎
+        a.label-text(href='/serviceRecords') Service Records
+      .nav-item
+        span.nav-icon 📦
+        a.label-text(href='/inventory') Inventory
+      .nav-item
+        span.nav-icon 👤
+        a.label-text(href='/userManagement') User Management
+      .nav-item
+        span.nav-icon 🕒
+        a.label-text(href='/activityLogs') Activity Logs
+      .nav-item
+        span.nav-icon 🏷
+        a.label-text(href='/servicePricing') Service Pricing
+      .sidebar-foot.label-text Oyera Auto Service Bay<br>v0.1 prototype
+
+    .main
+      .topbar
+        h1#topbar-title Senior Technician Dashboard
+        .right
+          span#topbar-sub Sept 04 2026
+          span.admin-chip Senior ▾
+
+      .content
+        .view.active#view-dashboard
+          .stat-row
+            .stat-card
+              .stat-label Cars in Today
+              .stat-value 12
+            .stat-card
+              .stat-label Services Completed
+              .stat-value 8
+            .stat-card
+              .stat-label Total Revenue
+              .stat-value Shs.20,000,000
+            .stat-card
+              .stat-label Active Technicians
+              .stat-value 5
+
+          .panel-row
+            .panel
+              .panel-head Bay Status Overview
+              .panel-body#bay-status
+            .panel
+              .panel-head Daily Revenue Chart
+              .chart-wrap
+                svg#revenue-chart(viewBox='0 0 320 170')
+
+          .panel-row
+            .panel
+              .panel-head Technician Activity
+              .panel-body(style='padding:0')
+                table.table
+                  thead
+                    tr
+                      th ID
+                      th Technician
+                      th Specialty
+                      th Time allocation
+                  tbody#tech-activity
+            .panel
+              .panel-head Inventory Alerts
+              .panel-body#inv-alerts
+
+        .view#view-records
+          .toolbar
+            input(type='text', placeholder='Search by Car Plate...')
+            input(type='text', placeholder='Search by Technician...')
+            input(type='date')
+            span(style='color: var(--muted); font-size: 12px') to
+            input(type='date')
+            button.btn Filter
+            button.btn.ghost Print
+          .stat-row(style='grid-template-columns: repeat(3, 1fr)')
+            .stat-card
+              .stat-label Total Cars Serviced
+              .stat-value 48
+            .stat-card
+              .stat-label Total Revenue
+              .stat-value $12,450
+            .stat-card
+              .stat-label Pending Jobs
+              .stat-value 5
+          .content-grid
+            .panel
+              table
+                thead
+                  tr
+                    th Car ID
+                    th Service Type
+                    th Parts Used
+                    th Technician
+                    th Cost
+                    th Status
+                tbody#records-table
+            .panel
+              .panel-head Service Details
+              .panel-body#record-details
+
+  script(src='/js/adminDashboard.js', defer)

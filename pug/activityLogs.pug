@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  - var title='Activity Logs | Oyera Auto Service Bay'
+  .page-shell
+    header.topbar
+      h1 Activity Logs
+    section.panel.mt-4
+      h3 Recent Actions
+      .table-responsive
+        table.table
+          thead
+            tr
+              th User
+              th Role
+              th Action
+              th Record
+              th Time
+              th Status
+          tbody
+            tr
+              td(colspan='6', class='text-center text-muted') Activity log is active.
+  script(src='/js/adminDashboard.js', defer)

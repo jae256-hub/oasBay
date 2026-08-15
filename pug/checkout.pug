@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  - var title='Checkout | Oyera Auto Service Bay'
+  .auth-shell.login-container
+    .auth-card
+      .auth-header
+        h1.auth-title Payment checkout
+        p.auth-subtitle Complete payment using your preferred method.
+      #checkoutMessage.auth-notice(role='alert')
+      form#checkoutForm.auth-form(novalidate)
+        .form-group.mb-3
+          label.form-label(for='requestId') Request ID
+          input#requestId.auth-input.form-control(type='text', name='requestId', placeholder='Enter service request ID', required)
+        .form-group.mb-3
+          label.form-label(for='paymentMethod') Payment method
+          select#paymentMethod.auth-input.form-select(name='paymentMethod', required)
+            option(value='MasterCard') MasterCard
+            option(value='Mtn Mobile Money') Mtn Mobile Money
+            option(value='Airtel Mobile Money') Airtel Mobile Money
+            option(value='QR') QR Code
+        button.auth-btn.auth-btn-primary.w-100(type='submit') Pay now
+  script(src='/js/checkout.js', defer)
