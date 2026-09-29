@@ -12,6 +12,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     maximumFractionDigits: 0,
   });
 
+  function notify(message, isError = false) {
+    alert(`${isError ? "Action failed" : "Success"}: ${message}`);
+  }
+
+  async function readResponse(response, fallbackMessage) {
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      throw new Error(
+        "Your session may have expired. Please sign in and try again.",
+      );
+    }
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message || result.error || fallbackMessage);
+    }
+    return result;
+  }
+
+  function setSubmitting(form, submitting) {
+    const submitButton = form.querySelector("[type='submit']");
+    if (!submitButton) return;
+    submitButton.disabled = submitting;
+    submitButton.setAttribute("aria-busy", String(submitting));
+  }
+
   function formatMoney(value) {
     return money.format(Number(value || 0));
   }
@@ -88,7 +113,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       const jsonItems = jsonResponse.ok ? await jsonResponse.json() : [];
       const dbResponse = await fetch("/api/inventory");
       const dbItems = dbResponse.ok ? await dbResponse.json() : [];
-      const merged = [...(Array.isArray(jsonItems) ? jsonItems : []), ...(Array.isArray(dbItems) ? dbItems : [])];
+      const merged = [
+        ...(Array.isArray(jsonItems) ? jsonItems : []),
+        ...(Array.isArray(dbItems) ? dbItems : []),
+      ];
       const byId = new Map();
       merged.forEach((item) => {
         const key = String(item._id || item.id || `${item.name}-${item.price}`);
@@ -110,6 +138,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   addForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (addForm.dataset.submitting === "true") return;
     const payload = {
       name: addForm.name.value.trim(),
       description: addForm.description.value.trim(),
@@ -118,24 +147,41 @@ document.addEventListener("DOMContentLoaded", async () => {
       image: addForm.image.value.trim(),
     };
 
-    if (!payload.name || !payload.price) {
+    if (!payload.name || !Number.isFinite(payload.price) || payload.price < 0) {
+      notify("Enter an item name and a valid, non-negative price.", true);
       return;
     }
 
-    await fetch("/api/inventory", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    addForm.dataset.submitting = "true";
+    setSubmitting(addForm, true);
+    try {
+      const response = await fetch("/api/inventory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      await readResponse(response, "Unable to add inventory item.");
 
-    addForm.reset();
-    refreshInventory();
+      addForm.reset();
+      notify("Inventory item created successfully.");
+      await refreshInventory();
+    } catch (error) {
+      console.error(error);
+      notify(error.message || "Unable to create inventory item.", true);
+    } finally {
+      delete addForm.dataset.submitting;
+      setSubmitting(addForm, false);
+    }
   });
 
   editForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (editForm.dataset.submitting === "true") return;
     const id = editForm.dataset.id;
-    if (!id) return;
+    if (!id) {
+      notify("Select an item to edit first.", true);
+      return;
+    }
 
     const payload = {
       name: editForm.name.value.trim(),
@@ -145,15 +191,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       image: editForm.image.value.trim(),
     };
 
-    await fetch(`/api/inventory/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    if (!payload.name || !Number.isFinite(payload.price) || payload.price < 0) {
+      notify("Enter an item name and a valid, non-negative price.", true);
+      return;
+    }
 
-    editForm.reset();
-    delete editForm.dataset.id;
-    refreshInventory();
+    editForm.dataset.submitting = "true";
+    setSubmitting(editForm, true);
+    try {
+      const response = await fetch(`/api/inventory/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      await readResponse(response, "Unable to update inventory item.");
+
+      editForm.reset();
+      delete editForm.dataset.id;
+      notify("Inventory item updated successfully.");
+      await refreshInventory();
+    } catch (error) {
+      console.error(error);
+      notify(error.message || "Unable to update inventory item.", true);
+    } finally {
+      delete editForm.dataset.submitting;
+      setSubmitting(editForm, false);
+    }
   });
 
   document.addEventListener("click", async (event) => {
@@ -165,13 +228,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       const action = actionButton.dataset.action;
 
       if (action === "edit") {
+        try {
+          const response = await fetch("/api/inventory");
+          const items = await response.json();
+          const item = items.find(
+            (entry) => String(entry._id || entry.id) === String(id),
+          );
+          if (!item) return;
+
+          editForm.dataset.id = id;
+          editForm.name.value = item.name || "";
+          editForm.description.value = item.description || "";
+          editForm.price.value = item.price || 0;
+          editForm.currency.value = item.currency || "UGX";
+          editForm.image.value = item.image || "";
+          editForm.scrollIntoView({ behavior: "smooth", block: "start" });
+        } catch (error) {
+          console.error(error);
+          notify("Unable to load item for editing.", true);
+        }
+      }
+
+      if (action === "delete") {
+        if (
+          !window.confirm("Delete this inventory item? This cannot be undone.")
+        ) {
+          return;
+        }
+        actionButton.disabled = true;
+        try {
+          const response = await fetch(`/api/inventory/${id}`, {
+            method: "DELETE",
+          });
+          await readResponse(response, "Unable to delete inventory item.");
+
+          notify("Inventory item deleted successfully.");
+          await refreshInventory();
+        } catch (error) {
+          console.error(error);
+          notify(error.message || "Unable to delete inventory item.", true);
+        } finally {
+          actionButton.disabled = false;
+        }
+      }
+    }
+
+    if (dbEditButton) {
+      const id = dbEditButton.dataset.dbEdit;
+      try {
         const response = await fetch("/api/inventory");
         const items = await response.json();
         const item = items.find(
           (entry) => String(entry._id || entry.id) === String(id),
         );
         if (!item) return;
-
         editForm.dataset.id = id;
         editForm.name.value = item.name || "";
         editForm.description.value = item.description || "";
@@ -179,29 +289,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         editForm.currency.value = item.currency || "UGX";
         editForm.image.value = item.image || "";
         editForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (error) {
+        console.error(error);
+        notify("Unable to load selected item.", true);
       }
-
-      if (action === "delete") {
-        await fetch(`/api/inventory/${id}`, { method: "DELETE" });
-        refreshInventory();
-      }
-    }
-
-    if (dbEditButton) {
-      const id = dbEditButton.dataset.dbEdit;
-      const response = await fetch("/api/inventory");
-      const items = await response.json();
-      const item = items.find(
-        (entry) => String(entry._id || entry.id) === String(id),
-      );
-      if (!item) return;
-      editForm.dataset.id = id;
-      editForm.name.value = item.name || "";
-      editForm.description.value = item.description || "";
-      editForm.price.value = item.price || 0;
-      editForm.currency.value = item.currency || "UGX";
-      editForm.image.value = item.image || "";
-      editForm.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
 

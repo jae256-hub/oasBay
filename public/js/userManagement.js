@@ -8,6 +8,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!usersTableBody) return;
 
+  const notify = (message, type = "success") => {
+    alert(`${type === "error" ? "Action failed" : "Success"}: ${message}`);
+  };
+
+  async function readResponse(response, fallbackMessage) {
+    const contentType = response.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      throw new Error(
+        "Your session may have expired. Please sign in and try again.",
+      );
+    }
+    const result = await response.json();
+    if (!response.ok || result.error) {
+      throw new Error(result.error || result.message || fallbackMessage);
+    }
+    return result;
+  }
+
+  function setSubmitting(form, submitting) {
+    const button = form.querySelector("button[type='submit']");
+    if (!button) return;
+    button.disabled = submitting;
+    button.setAttribute("aria-busy", String(submitting));
+  }
+
   const loadUsers = async () => {
     try {
       const response = await fetch("/api/users");
@@ -54,6 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   addUserForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (addUserForm.dataset.submitting === "true") return;
     const payload = {
       firstName: addUserForm.firstName.value.trim(),
       surname: addUserForm.surname.value.trim(),
@@ -70,25 +96,40 @@ document.addEventListener("DOMContentLoaded", async () => {
       !payload.password ||
       !payload.telephone
     ) {
+      notify("Please complete all user fields before saving.", "error");
       return;
     }
 
-    const response = await fetch("/api/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    addUserForm.dataset.submitting = "true";
+    setSubmitting(addUserForm, true);
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      await readResponse(response, "Unable to create user.");
 
-    if (response.ok) {
       addUserForm.reset();
+      notify("User created successfully.");
       await loadUsers();
+    } catch (error) {
+      console.error(error);
+      notify(error.message || "Unable to create user.", "error");
+    } finally {
+      delete addUserForm.dataset.submitting;
+      setSubmitting(addUserForm, false);
     }
   });
 
   editUserForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (editUserForm.dataset.submitting === "true") return;
     const id = editUserForm.dataset.id;
-    if (!id) return;
+    if (!id) {
+      notify("Select a user to edit first.", "error");
+      return;
+    }
 
     const payload = {
       firstName: editUserForm.firstName.value.trim(),
@@ -97,15 +138,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       telephone: editUserForm.telephone.value.trim(),
     };
 
-    await fetch(`/api/users/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    editUserForm.dataset.submitting = "true";
+    setSubmitting(editUserForm, true);
+    try {
+      const response = await fetch(`/api/users/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      await readResponse(response, "Unable to update user.");
 
-    editUserForm.reset();
-    delete editUserForm.dataset.id;
-    await loadUsers();
+      editUserForm.reset();
+      delete editUserForm.dataset.id;
+      notify("User updated successfully.");
+      await loadUsers();
+    } catch (error) {
+      console.error(error);
+      notify(error.message || "Unable to update user.", "error");
+    } finally {
+      delete editUserForm.dataset.submitting;
+      setSubmitting(editUserForm, false);
+    }
   });
 
   document.addEventListener("click", async (event) => {
@@ -115,21 +168,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     const action = target.dataset.action;
 
     if (action === "delete-user") {
-      await fetch(`/api/users/${id}`, { method: "DELETE" });
-      await loadUsers();
+      if (!window.confirm("Delete this user account? This cannot be undone.")) {
+        return;
+      }
+      target.disabled = true;
+      try {
+        const response = await fetch(`/api/users/${id}`, { method: "DELETE" });
+        await readResponse(response, "Unable to delete user.");
+        notify("User deleted successfully.");
+        await loadUsers();
+      } catch (error) {
+        console.error(error);
+        notify(error.message || "Unable to delete user.", "error");
+      } finally {
+        target.disabled = false;
+      }
       return;
     }
 
     if (action === "edit-user") {
-      const response = await fetch(`/api/users/${id}`);
-      const user = await response.json();
-      if (!user) return;
-      editUserForm.dataset.id = id;
-      editUserForm.firstName.value = user.firstName || "";
-      editUserForm.surname.value = user.surname || "";
-      editUserForm.role.value = user.role || "Technician";
-      editUserForm.telephone.value = user.telephone || "";
-      editUserForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      try {
+        const response = await fetch(`/api/users/${id}`);
+        const user = await readResponse(
+          response,
+          "Unable to load user details.",
+        );
+        editUserForm.dataset.id = id;
+        editUserForm.firstName.value = user.firstName || "";
+        editUserForm.surname.value = user.surname || "";
+        editUserForm.role.value = user.role || "Technician";
+        editUserForm.telephone.value = user.telephone || "";
+        editUserForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (error) {
+        console.error(error);
+        notify("Unable to load user details.", "error");
+      }
     }
   });
 

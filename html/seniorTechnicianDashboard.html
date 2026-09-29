@@ -12,8 +12,8 @@
       crossorigin="anonymous"s
     />
   </head>
-  <body action="adminDashboard" method="POST">
-    <div class="shell">
+  <body action="seniorTechnicianDashboard" method="POST" >
+    <div class="dashboard-wapper">
       <div class="sidebar">
         <div class="brand">
           <div class="brand-name">OAS Bay</div>
@@ -21,7 +21,7 @@
         </div>
         <div class="nav-item active" data-view="dashboard">
           <span class="nav-icon">▣</span
-          ><span class="label-text">Senior Technician Dashboard</span>
+          ><a href="/seniorTechnicianDashboard" class="label-text">Senior Technician Dashboard</a>
         </div>
         <div class="nav-item" data-view="records">
           <span class="nav-icon">🗎</span
@@ -31,10 +31,6 @@
           <span class="nav-icon">📦</span
           ><a href="/inventory" class="label-text">Inventory</a>
         </div>
-        <div class="nav-item" data-view="users">
-          <span class="nav-icon">👤</span
-          ><a href="/userManagement" class="label-text">User Management</a>
-        </div>
         <div class="nav-item" data-view="logs">
           <span class="nav-icon">🕒</span
           ><a href="/activityLogs" class="label-text">Activity Logs</a>
@@ -43,13 +39,17 @@
           <span class="nav-icon">🏷</span
           ><a href="/servicePricing" class="label-text">Service Pricing</a>
         </div>
+        <div class="nav-item">
+          <span class="nav-icon">⎋</span
+          ><a href="/logout" class="label-text">Logout</a>
+        </div>
         <div class="sidebar-foot label-text">
           Oyera Auto Service Bay<br />v0.1 prototype
         </div>
       </div>
 
-      <div class="main">
-        <div class="topbar">
+      <div class="main-content">
+        <div class="dashboard-header">
           <h1 id="topbar-title">Senior Technician</h1>
           <div class="right">
             <span id="topbar-sub"> Sept 04 2026</span>

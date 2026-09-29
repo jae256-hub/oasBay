@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>admin dashboard</title>
+    <title>Technician Dashboard</title>
     <link rel="stylesheet" href="/css/oyera.css" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -12,16 +12,16 @@
       crossorigin="anonymous"
     />
   </head>
-  <body action="technicianDashboard" method="POST">
-    <div class="shell">
+  <body action="technicianDashboard" method="POST" >
+    <div class="dashboard-wrapper">
       <div class="sidebar">
-        <div class="brand">
+        <div class="logo">
           <div class="brand-name">OAS Bay</div>
           <div class="brand-sub">Technician Console</div>
         </div>
         <div class="nav-item active" data-view="dashboard">
           <span class="nav-icon">▣</span
-          ><span class="label-text">Dashboard</span>
+          ><a href="/technicianDashboard" class="label-text">Technician Dashboard</a>
         </div>
         <div class="nav-item" data-view="records">
           <span class="nav-icon">🗎</span
@@ -31,10 +31,6 @@
           <span class="nav-icon">📦</span
           ><a href="/inventory" class="label-text">Inventory</a>
         </div>
-        <div class="nav-item" data-view="users">
-          <span class="nav-icon">👤</span
-          ><a href="/userManagement" class="label-text">User Management</a>
-        </div>
         <div class="nav-item" data-view="logs">
           <span class="nav-icon">🕒</span
           ><a href="/activityLogs" class="label-text">Activity Logs</a>
@@ -43,14 +39,18 @@
           <span class="nav-icon">🏷</span
           ><a href="/servicePricing" class="label-text">Service Pricing</a>
         </div>
+        <div class="nav-item">
+          <span class="nav-icon">⎋</span
+          ><a href="/logout" class="label-text">Logout</a>
+        </div>
         <div class="sidebar-foot label-text">
           Oyera Auto Service Bay<br />v0.1 prototype
         </div>
       </div>
 
-      <div class="main">
+      <div class="main-content">
         <div class="topbar">
-          <h1 id="topbar-title">Technician Dashboard</h1>
+          <h1 id="dashboard-header">Technician Dashboard</h1>
           <div class="right">
             <span id="topbar-sub"> Sept 04 2026</span>
             <span class="admin-chip">Techn ▾</span>

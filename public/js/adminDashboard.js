@@ -33,9 +33,42 @@ const techActivity = [
   },
 ];
 const invAlerts = [
-  "Low on Oil Filters",
-  "Brake Pads Stock Low",
-  "Order More Engine Oil",
+  {
+    title: "Engine Oil Filters",
+    detail:
+      "Only 8 units remain. Reorder immediately before the next service batch.",
+    level: "Critical",
+  },
+  {
+    title: "Brake Pads",
+    detail:
+      "Below approved safety threshold in the main store. Urgent replenishment needed.",
+    level: "Urgent",
+  },
+  {
+    title: "Engine Oil",
+    detail:
+      "Bay 2 and Bay 3 are below target stock. Restock before the afternoon shift.",
+    level: "High",
+  },
+  {
+    title: "Air Filters",
+    detail:
+      "Only 14 units left across all bays. Weekly target has been missed.",
+    level: "Moderate",
+  },
+  {
+    title: "Coolant",
+    detail:
+      "Rear bay stock is low. Top-up is required before the next maintenance cycle.",
+    level: "Medium",
+  },
+  {
+    title: "Spark Plugs",
+    detail:
+      "Current stock is under reorder point. Procurement should be scheduled today.",
+    level: "Medium",
+  },
 ];
 const revenue = [500, 900, 1400, 1100, 1300, 1850];
 const revenueDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Today"];
@@ -389,7 +422,10 @@ function renderChart() {
 }
 
 function renderTechActivity() {
-  document.getElementById("tech-activity").innerHTML = techActivity
+  const tableBody = document.getElementById("tech-activity");
+  if (!tableBody) return;
+
+  tableBody.innerHTML = techActivity
     .map(
       (t) => `
     <tr><td>${t.tech}</td><td>${t.act}</td><td>${t.time}</td><td>${t.details}</td></tr>`,
@@ -398,10 +434,20 @@ function renderTechActivity() {
 }
 
 function renderInvAlerts() {
-  document.getElementById("inv-alerts").innerHTML = invAlerts
+  const container = document.getElementById("inv-alerts");
+  if (!container) return;
+
+  container.innerHTML = invAlerts
     .map(
-      (a) => `
-    <div class="checklist-item"><span class="dot-warn"></span>${a}</div>`,
+      (alertItem) => `
+        <div class="checklist-item" style="display:block; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:4px;">
+            <strong>${alertItem.title}</strong>
+            <span class="status-pill ${statusClass(alertItem.level === "Critical" ? "Pending" : alertItem.level === "Urgent" ? "In Progress" : "Completed")}">${alertItem.level}</span>
+          </div>
+          <div style="color: var(--muted); font-size: 12px; line-height: 1.5;">${alertItem.detail}</div>
+        </div>
+      `,
     )
     .join("");
 }
@@ -534,21 +580,26 @@ const titles = {
 };
 document.querySelectorAll(".nav-item").forEach((item) => {
   item.addEventListener("click", () => {
+    const view = item.getAttribute("data-view");
+    const targetView = document.getElementById("view-" + view);
+    const title = document.getElementById("topbar-title1");
+    const subtitle = document.getElementById("topbar-sub");
+    if (!view || !targetView || !title || !subtitle) return;
+
     document
       .querySelectorAll(".nav-item")
       .forEach((n) => n.classList.remove("active"));
     item.classList.add("active");
-    const view = item.getAttribute("data-view");
     document
       .querySelectorAll(".view")
       .forEach((v) => v.classList.remove("active"));
-    document.getElementById("view-" + view).classList.add("active");
-    document.getElementById("topbar-title").textContent = titles[view][0];
-    document.getElementById("topbar-sub").textContent = titles[view][1];
+    targetView.classList.add("active");
+    title.textContent = titles[view][0];
+    subtitle.textContent = titles[view][1];
   });
 });
 let bayCapacity = 30;
-carsServiced = document.getElementById("stat-value1");
+const carsServiced = document.querySelector(".stat-value1");
 
 // ---------- INIT ----------
 renderBays();

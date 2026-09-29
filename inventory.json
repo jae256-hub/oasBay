@@ -4,7 +4,7 @@
     "description": "Engine-oil",
     "image": "https://i.pinimg.com/1200x/61/08/ce/6108cecc43d19e4d33ed3f093623d726.jpg",
     "name": "Abro Synthetic Blend",
-    "price": 84000,
+    "price": 80000,
     "currency": "UGX"
   },
   {
@@ -66,7 +66,7 @@
   {
     "id": 9,
     "description": "Engine-oil",
-    "image": "",
+    "image": "https://i.pinimg.com/1200x/7d/fb/8b/7dfb8b11545ca5f6db5482e952ff0d76.jpg",
     "name": "Mercedes AMG Engine oil 1l",
     "price": 80000,
     "currency": "UGX"
@@ -74,21 +74,19 @@
   {
     "id": 10,
     "description": "Engine-oil",
-    "image": "",
+    "image": "https://i.pinimg.com/736x/e0/af/c1/e0afc1716655f58cec1b19eb6b5bc32b.jpg",
     "name": "One 5w-30 Engine oil",
     "price": 250000,
     "currency": "UGX"
   },
-
   {
     "id": 11,
     "description": "Engine-oil",
-    "image": "https://i.pinimg.com/1200x/7d/fb/8b/7dfb8b11545ca5f6db5482e952ff0d76.jpg",
+    "image": "https://i.pinimg.com/1200x/15/4a/26/154a26d53473b6cfd51c15937f2ffe09.jpg",
     "name": "Toyota Wish Engine oil",
     "price": 150000,
     "currency": "UGX"
   },
-
   {
     "id": 12,
     "description": "Oil Filters",
@@ -103,14 +101,6 @@
     "image": "https://i.pinimg.com/736x/3a/7f/c9/3a7fc91c7ad760f3ffcfded2d051df09.jpg",
     "name": "Toyota Oil Filters",
     "price": 20000,
-    "currency": "UGX"
-  },
-  {
-    "id": 14,
-    "description": "Oil Filters",
-    "image": "https://i.pinimg.com/736x/e8/06/cb/e806cb311323a16d7f888063b556af66.jpg",
-    "name": "OSK Oil Filter Toyota",
-    "price": 15500,
     "currency": "UGX"
   }
 ]

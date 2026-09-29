@@ -12,7 +12,49 @@
       crossorigin="anonymous"
     />
   </head>
-  <body>
+   <body action="adminDashboard" method="POST" class="admin">
+    <div class="dashboard-wrapper">
+      <div class="sidebar">
+        <div class="brand">
+          <div class="brand-name">OAS Bay</div>
+          <div class="brand-sub">Admin Console</div>
+        </div>
+        <div class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">▣</span
+          ><span class="label-text">Admin Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="records">
+          <span class="nav-icon">🗎</span
+          ><a href="/serviceRecords" class="label-text">Service Records</a>
+        </div>
+        <div class="nav-item" data-view="inventory">
+          <span class="nav-icon">📦</span
+          ><a href="/inventory" class="label-text">Inventory</a>
+        </div>
+        <div class="nav-item" data-view="users">
+          <span class="nav-icon">👤</span
+          ><a href="/userManagement" class="label-text">User Management</a>
+        </div>
+        <div class="nav-item" data-view="logs">
+          <span class="nav-icon">🕒</span
+          ><a href="/activityLogs" class="label-text">Activity Logs</a>
+        </div>
+        <div class="nav-item" data-view="pricing">
+          <span class="nav-icon">🏷</span
+          ><a href="/servicePricing" class="label-text">Service Pricing</a>
+        </div>
+        <div class="nav-item" data-view="payments">
+          <span class="nav-icon">💳</span
+          ><a href="/paymentPortal" class="label-text">Payment Portal</a>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⎋</span
+          ><a href="/logout" class="label-text">Logout</a>
+        </div>
+        <div class="sidebar-foot label-text">
+          Oyera Auto Service Bay<br />v0.1 prototype
+        </div>
+      </div>
     <div class="page-shell">
       <header class="topbar">
         <h1>Activity Logs</h1>
