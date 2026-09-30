@@ -20,9 +20,14 @@ const Notification = require("../models/Notification");
 const app = express();
 const PORT = process.env.PORT || 8000;
 const HOST = "localhost";
-const publicDir = path.resolve(__dirname, "../public");
-const htmlDir = path.resolve(__dirname, "../html");
-const inventoryJsonPath = path.resolve(__dirname, "../inventory.json");
+const isProduction =
+  process.env.NODE_ENV === "production" || Boolean(process.env.NETLIFY);
+const projectDir = process.env.NETLIFY
+  ? process.cwd()
+  : path.resolve(__dirname, "..");
+const publicDir = path.join(projectDir, "public");
+const htmlDir = path.join(projectDir, "html");
+const inventoryJsonPath = path.join(projectDir, "inventory.json");
 
 function readInventoryJson() {
   try {
@@ -38,20 +43,12 @@ function writeInventoryJson(items) {
 }
 
 async function getInventoryList() {
-  const fileItems = readInventoryJson();
-  const dbItems =
-    mongoose.connection.readyState === 1
-      ? await InventoryItem.find().lean()
-      : [];
-  const merged = [...fileItems, ...dbItems];
-  const unique = new Map();
-
-  for (const item of merged) {
-    const key = String(item._id || item.id || `${item.name}-${item.price}`);
-    unique.set(key, item);
+  if (mongoose.connection.readyState === 1) {
+    return InventoryItem.find().lean();
   }
 
-  return [...unique.values()];
+  const fileItems = readInventoryJson();
+  return fileItems;
 }
 
 async function notifyAdminOfAccess(req, pageName) {
@@ -280,25 +277,118 @@ async function seedDemoData() {
   }
 }
 
+async function seedInventoryData() {
+  if ((await InventoryItem.countDocuments()) !== 0) {
+    return;
+  }
+
+  const items = readInventoryJson().filter((item) =>
+    Number.isFinite(Number(item.id)),
+  );
+  if (items.length) {
+    await InventoryItem.insertMany(items);
+  }
+}
+
+async function seedProductionAdmin() {
+  if (await User.exists({ role: config.roles.ADMIN })) {
+    return;
+  }
+
+  const email = String(process.env.ADMIN_EMAIL || "")
+    .trim()
+    .toLowerCase();
+  const password = process.env.ADMIN_PASSWORD;
+  const telephone = process.env.ADMIN_TELEPHONE;
+  if (!email || !password || !telephone) {
+    throw new Error(
+      "Set ADMIN_EMAIL, ADMIN_PASSWORD, and ADMIN_TELEPHONE to create the first admin account.",
+    );
+  }
+  if (await User.exists({ email })) {
+    throw new Error(
+      "ADMIN_EMAIL is already registered without the Admin role.",
+    );
+  }
+
+  await User.create({
+    firstName: "Service",
+    surname: "Administrator",
+    role: config.roles.ADMIN,
+    email,
+    password: await bcrypt.hash(password, 10),
+    telephone,
+  });
+}
+
 // MongoDB
 mongoose.set("strictQuery", false);
-mongoose
-  .connect(config.mongoUrl, { dbName: config.mongoDbName })
-  .then(async () => {
-    console.log(`Connected to MongoDB '${config.mongoDbName}'`);
-    await seedDemoData();
-  })
-  .catch((err) => console.error("MongoDB Connection error:", err));
+let databasePromise;
+let resolveSessionClient;
+const sessionClientPromise = new Promise((resolve) => {
+  resolveSessionClient = resolve;
+});
+
+function connectToDatabase() {
+  if (isProduction) {
+    if (!process.env.DATABASE_URL && !process.env.DATABASE) {
+      return Promise.reject(
+        new Error("Set DATABASE_URL to your MongoDB connection string."),
+      );
+    }
+    if (!process.env.SESSION_SECRET) {
+      return Promise.reject(
+        new Error("Set SESSION_SECRET to a private random value."),
+      );
+    }
+  }
+
+  if (databasePromise) {
+    return databasePromise;
+  }
+
+  const initializeDatabase = async () => {
+    resolveSessionClient(mongoose.connection.getClient());
+    await seedInventoryData();
+    if (isProduction) {
+      await seedProductionAdmin();
+    } else {
+      await seedDemoData();
+    }
+  };
+
+  databasePromise = (async () => {
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(config.mongoUrl, { dbName: config.mongoDbName });
+      console.log(`Connected to MongoDB '${config.mongoDbName}'`);
+    }
+    await initializeDatabase();
+  })().catch((error) => {
+    databasePromise = undefined;
+    throw error;
+  });
+
+  return databasePromise;
+}
 
 // Middleware
+app.set("trust proxy", 1);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "oyera-secret-key",
+    store: require("connect-mongo").create({
+      clientPromise: sessionClientPromise,
+      dbName: config.mongoDbName,
+    }),
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: isProduction,
+      sameSite: "lax",
+    },
   }),
 );
 app.use(express.static(publicDir));
@@ -533,7 +623,7 @@ app.get(
 
 // Inventory
 app.get("/api/inventory/json", async (req, res) => {
-  res.json(readInventoryJson());
+  res.json(mongoose.connection.readyState === 1 ? [] : readInventoryJson());
 });
 
 app.get("/api/inventory", async (req, res) => {
@@ -617,26 +707,24 @@ app.put(
           message: "Item name and a valid, non-negative price are required.",
         });
       }
-      const fileItems = readInventoryJson();
-      const fileIndex = fileItems.findIndex(
-        (item) => String(item.id || item._id) === String(req.params.id),
-      );
-
-      if (fileIndex !== -1) {
-        const current = fileItems[fileIndex];
-        fileItems[fileIndex] = {
-          ...current,
-          name: safeName,
-          description: String(description ?? current.description ?? ""),
-          price: normalizedPrice,
-          currency: String(currency || current.currency || "UGX"),
-          image: String(image ?? current.image ?? ""),
-        };
-        writeInventoryJson(fileItems);
-        return res.json(fileItems[fileIndex]);
-      }
-
       if (mongoose.connection.readyState !== 1) {
+        const fileItems = readInventoryJson();
+        const fileIndex = fileItems.findIndex(
+          (item) => String(item.id || item._id) === String(req.params.id),
+        );
+        if (fileIndex !== -1) {
+          const current = fileItems[fileIndex];
+          fileItems[fileIndex] = {
+            ...current,
+            name: safeName,
+            description: String(description ?? current.description ?? ""),
+            price: normalizedPrice,
+            currency: String(currency || current.currency || "UGX"),
+            image: String(image ?? current.image ?? ""),
+          };
+          writeInventoryJson(fileItems);
+          return res.json(fileItems[fileIndex]);
+        }
         return res.status(404).json({ message: "Inventory item not found" });
       }
 
@@ -670,17 +758,15 @@ app.delete(
   ctrl.roleGuard(config.roles.ADMIN),
   async (req, res) => {
     try {
-      const items = readInventoryJson();
-      const remainingItems = items.filter(
-        (item) => String(item.id || item._id) !== String(req.params.id),
-      );
-
-      if (remainingItems.length !== items.length) {
-        writeInventoryJson(remainingItems);
-        return res.json({ ok: true, deletedId: req.params.id });
-      }
-
       if (mongoose.connection.readyState !== 1) {
+        const items = readInventoryJson();
+        const remainingItems = items.filter(
+          (item) => String(item.id || item._id) !== String(req.params.id),
+        );
+        if (remainingItems.length !== items.length) {
+          writeInventoryJson(remainingItems);
+          return res.json({ ok: true, deletedId: req.params.id });
+        }
         return res.status(404).json({ message: "Inventory item not found" });
       }
 
@@ -1000,6 +1086,13 @@ app.post("/api/notifications/:id/read", ctrl.authRedirect, async (req, res) => {
 
 app.use((req, res) => res.status(404).send("Page not found."));
 
-app.listen(PORT, HOST, () =>
-  console.log(`Server running http://${HOST}:${PORT}`),
-);
+if (require.main === module) {
+  connectToDatabase().catch((error) =>
+    console.error("MongoDB Connection error:", error),
+  );
+  app.listen(PORT, HOST, () =>
+    console.log(`Server running http://${HOST}:${PORT}`),
+  );
+}
+
+module.exports = { app, connectToDatabase };
