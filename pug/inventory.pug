@@ -1,0 +1,68 @@
+extends layout
+
+block content
+  - var title='Inventory | Oyera Auto Service Bay'
+  .page-shell
+    header.topbar
+      h1 Inventory Dashboard
+      .right-badge Admin access
+
+    section.summary-cards
+      .summary-card
+        .label Total items
+        .value#totalItems 0
+      .summary-card
+        .label Low stock
+        .value#lowStock 0
+      .summary-card
+        .label Total value
+        .value#totalValue UGX 0
+      .summary-card
+        .label DB records
+        .value#dbRecords 0
+
+    .main-grid
+      aside.panel
+        h3 Add inventory item
+        form#inventoryForm.stack-form
+          input(type='text', name='name', placeholder='Item name', required)
+          textarea(name='description', placeholder='Description')
+          input(type='number', name='price', placeholder='Price', min='0', step='0.01', required)
+          select(name='currency')
+            option(value='UGX') UGX
+            option(value='USD') USD
+          input(type='url', name='image', placeholder='Image URL')
+          button.btn.btn-primary(type='submit') Add item
+
+      section.panel
+        h3 Inventory overview
+        #inventoryList.inventory-list
+          .empty-state Loading inventory...
+
+    .panel.mt-4
+      h3 Edit inventory item
+      form#editInventoryForm.stack-form
+        input(type='text', name='name', placeholder='Updated item name')
+        textarea(name='description', placeholder='Updated description')
+        input(type='number', name='price', placeholder='Updated price', min='0', step='0.01')
+        select(name='currency')
+          option(value='UGX') UGX
+          option(value='USD') USD
+        input(type='url', name='image', placeholder='Updated image URL')
+        button.btn.btn-warning(type='submit') Update item
+
+    .panel.mt-4
+      h3 Database-backed records
+      .table-responsive
+        table.table.align-middle
+          thead
+            tr
+              th ID
+              th Name
+              th Status
+              th Price
+              th Action
+          tbody#dashboardRows
+            tr
+              td(colspan='5', class='text-center text-muted') Loading records...
+  script(src='/js/inventory.js', defer)

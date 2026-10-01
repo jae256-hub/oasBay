@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  - var title='Sign Up | Oyera Auto Service Bay'
+  .auth-shell.signup-container
+    .auth-card
+      .auth-header
+        h1.auth-title Create account
+        p.auth-subtitle Register with your details
+      #signupMessage.mt-3.text-center.small.text-muted
+      form#customerSignUpForm.auth-form(novalidate)
+        .row.g-3
+          .col-md-6
+            .form-group
+              label.form-label(for='firstName') First name
+              input#firstName.auth-input.form-control(type='text', name='firstName', placeholder='First name')
+              small#firstName-error.error-message
+          .col-md-6
+            .form-group
+              label.form-label(for='surname') Surname
+              input#surname.auth-input.form-control(type='text', name='surname', placeholder='Surname')
+              small#surname-error.error-message
+        .form-group.mt-3
+          label.form-label(for='role') Role
+          select#role.auth-input.form-select(name='role')
+            option(value='Admin') Admin
+            option(value='Technician') Technician
+            option(value='Senior Technician') Senior Technician
+        .form-group.mt-3
+          label.form-label(for='email') Email
+          input#email.auth-input.form-control(type='email', name='email', placeholder='you@example.com')
+          small#email-error.error-message
+        .form-group.mt-3
+          label.form-label(for='telephone') Telephone
+          input#telephone.auth-input.form-control(type='tel', name='telephone', placeholder='+256...')
+          small#telephone-error.error-message
+        .form-group.mt-3
+          label.form-label(for='password') Password
+          input#password.auth-input.form-control(type='password', name='password', placeholder='Minimum 6 characters')
+          small#password-error.error-message
+        button.submit-btn.mt-3(type='submit') Create account
+      .back-link.mt-3
+        a(href='/login') Already have an account? Login
+  script(src='/js/signUp.js', defer)

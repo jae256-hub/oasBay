@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  - var title='Oyera Home Page'
+  main.hero-shell
+    section.hero-card
+      div.hero-copy
+        span.hero-badge Premium Auto Care
+        h1.title#first-title WELCOME TO OYERA AUTO SERVICE BAY
+        h2.title#second-title Making roads safe one vehicle at a time.
+      div.hero-media
+        img.hero-image(src='https://i.pinimg.com/1200x/25/cf/08/25cf08b0c80cbb5463f88509d9230a9c.jpg', alt='Oyera Auto Service Bay')
+  div.hero-actions
+    a.glass-btn.glass-btn-primary(href='/login') Login
+    a.glass-btn.glass-btn-secondary(href='/signUp') Create account
+  script(src='/js/index.js', defer)
+  script(src='/js/homePage.js', defer)

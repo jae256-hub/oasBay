@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/61/08/ce/6108cecc43d19e4d33ed3f093623d726.jpg",
+    "name": "Abro Synthetic Blend",
+    "price": 80000,
+    "currency": "UGX"
+  },
+  {
+    "id": 2,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/736x/3d/13/f3/3d13f33b445a12474a336b7c9faa6322.jpg",
+    "name": "Castrol Engine oil 5w30",
+    "price": 200000,
+    "currency": "UGX"
+  },
+  {
+    "id": 3,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/ef/c5/37/efc537cb3f4432df86159a6cb8e0d556.jpg",
+    "name": "Mercedes Genuine Engine Oil",
+    "price": 70000,
+    "currency": "UGX"
+  },
+  {
+    "id": 4,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/bb/d2/cf/bbd2cf145a6e684c6936a6ee940dfc93.jpg",
+    "name": "BSG Engine Oil 5w-30 4l",
+    "price": 80000,
+    "currency": "UGX"
+  },
+  {
+    "id": 5,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/3b/01/aa/3b01aa67b1ce4de86329e491d07df919.jpg",
+    "name": "Mercedes Benz 5w-40",
+    "price": 155000,
+    "currency": "UGX"
+  },
+  {
+    "id": 6,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/15/4a/26/154a26d53473b6cfd51c15937f2ffe09.jpg",
+    "name": "Land Cruiser Engine Oil",
+    "price": 180000,
+    "currency": "UGX"
+  },
+  {
+    "id": 7,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/736x/a7/1a/69/a71a693592c82db39d3cdb21ee25f105.jpg",
+    "name": "Rubia Engine Oil",
+    "price": 150000,
+    "currency": "UGX"
+  },
+  {
+    "id": 8,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/736x/97/c9/ca/97c9ca436c3e0206692cf8e6c6747054.jpg",
+    "name": "Yamalube Engine Oil",
+    "price": 165000,
+    "currency": "UGX"
+  },
+  {
+    "id": 9,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/7d/fb/8b/7dfb8b11545ca5f6db5482e952ff0d76.jpg",
+    "name": "Mercedes AMG Engine oil 1l",
+    "price": 80000,
+    "currency": "UGX"
+  },
+  {
+    "id": 10,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/736x/e0/af/c1/e0afc1716655f58cec1b19eb6b5bc32b.jpg",
+    "name": "One 5w-30 Engine oil",
+    "price": 250000,
+    "currency": "UGX"
+  },
+  {
+    "id": 11,
+    "description": "Engine-oil",
+    "image": "https://i.pinimg.com/1200x/15/4a/26/154a26d53473b6cfd51c15937f2ffe09.jpg",
+    "name": "Toyota Wish Engine oil",
+    "price": 150000,
+    "currency": "UGX"
+  },
+  {
+    "id": 12,
+    "description": "Oil Filters",
+    "image": "https://i.pinimg.com/1200x/61/64/37/616437a5f374d36236de9bd2d8eb8c33.jpg",
+    "name": "Subaru Original Oil Filters",
+    "price": 20000,
+    "currency": "UGX"
+  },
+  {
+    "id": 13,
+    "description": "Oil Filters",
+    "image": "https://i.pinimg.com/736x/3a/7f/c9/3a7fc91c7ad760f3ffcfded2d051df09.jpg",
+    "name": "Toyota Oil Filters",
+    "price": 20000,
+    "currency": "UGX"
+  }
+]

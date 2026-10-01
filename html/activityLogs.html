@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oyera Auto Service Bay | Activity Logs</title>
+    <link rel="stylesheet" href="/css/oyera.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+   <body action="adminDashboard" method="POST" class="admin">
+    <div class="dashboard-wrapper">
+      <div class="sidebar">
+        <div class="brand">
+          <div class="brand-name">OAS Bay</div>
+          <div class="brand-sub">Admin Console</div>
+        </div>
+        <div class="nav-item active" data-view="dashboard">
+          <span class="nav-icon">▣</span
+          ><span class="label-text">Admin Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="records">
+          <span class="nav-icon">🗎</span
+          ><a href="/serviceRecords" class="label-text">Service Records</a>
+        </div>
+        <div class="nav-item" data-view="inventory">
+          <span class="nav-icon">📦</span
+          ><a href="/inventory" class="label-text">Inventory</a>
+        </div>
+        <div class="nav-item" data-view="users">
+          <span class="nav-icon">👤</span
+          ><a href="/userManagement" class="label-text">User Management</a>
+        </div>
+        <div class="nav-item" data-view="logs">
+          <span class="nav-icon">🕒</span
+          ><a href="/activityLogs" class="label-text">Activity Logs</a>
+        </div>
+        <div class="nav-item" data-view="pricing">
+          <span class="nav-icon">🏷</span
+          ><a href="/servicePricing" class="label-text">Service Pricing</a>
+        </div>
+        <div class="nav-item" data-view="payments">
+          <span class="nav-icon">💳</span
+          ><a href="/paymentPortal" class="label-text">Payment Portal</a>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⎋</span
+          ><a href="/logout" class="label-text">Logout</a>
+        </div>
+        <div class="sidebar-foot label-text">
+          Oyera Auto Service Bay<br />v0.1 prototype
+        </div>
+      </div>
+    <div class="page-shell">
+      <header class="topbar">
+        <h1>Activity Logs</h1>
+      </header>
+
+      <section class="summary-cards">
+        <div class="summary-card">
+          <div class="label">Log Entries</div>
+          <div class="value" id="logCount">0</div>
+        </div>
+      </section>
+
+      <section class="table-wrap panel mt-4">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Message</th>
+                <th>Actor</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <tr>
+                <td colspan="4" class="text-center text-muted">
+                  Loading activity...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <script src="/js/activityLogs.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

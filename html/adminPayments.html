@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Portal</title>
+    <link rel="stylesheet" href="/css/oyera.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="admin">
+    <div class="dashboard-wrapper">
+      <div class="sidebar">
+        <div class="brand">
+          <div class="brand-name">OAS Bay</div>
+          <div class="brand-sub">Admin Console</div>
+        </div>
+        <div class="nav-item" data-view="dashboard">
+          <span class="nav-icon">▣</span>
+          <a href="/adminDashboard" class="label-text">Admin Dashboard</a>
+        </div>
+        <div class="nav-item" data-view="records">
+          <span class="nav-icon">🗎</span>
+          <a href="/serviceRecords" class="label-text">Service Records</a>
+        </div>
+        <div class="nav-item" data-view="inventory">
+          <span class="nav-icon">📦</span>
+          <a href="/inventory" class="label-text">Inventory</a>
+        </div>
+        <div class="nav-item" data-view="users">
+          <span class="nav-icon">👤</span>
+          <a href="/userManagement" class="label-text">User Management</a>
+        </div>
+        <div class="nav-item active" data-view="payments">
+          <span class="nav-icon">💳</span>
+          <a href="/paymentPortal" class="label-text">Payment Portal</a>
+        </div>
+        <div class="nav-item" data-view="logs">
+          <span class="nav-icon">🕒</span>
+          <a href="/activityLogs" class="label-text">Activity Logs</a>
+        </div>
+        <div class="nav-item" data-view="pricing">
+          <span class="nav-icon">🏷</span>
+          <a href="/servicePricing" class="label-text">Service Pricing</a>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">⎋</span>
+          <a href="/logout" class="label-text">Logout</a>
+        </div>
+        <div class="sidebar-foot label-text">
+          Oyera Auto Service Bay<br />v0.1 prototype
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="dashboard-header">
+          <h1>Payment Portal</h1>
+          <div class="right">
+            <span id="topbar-sub">Admin payment records</span>
+          </div>
+        </div>
+
+        <div class="content">
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-label">Total Transactions</div>
+              <div class="stat-value" id="totalTransactions">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Paid</div>
+              <div class="stat-value" id="paidTransactions">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Pending</div>
+              <div class="stat-value" id="pendingTransactions">0</div>
+            </div>
+          </div>
+
+          <div class="panel-row">
+            <div class="panel">
+              <div class="panel-head">Record a payment</div>
+              <div class="panel-body">
+                <form id="paymentForm" class="auth-form">
+                  <div class="mb-3">
+                    <label class="form-label" for="requestId">Request ID</label>
+                    <input
+                      class="form-control"
+                      id="requestId"
+                      name="requestId"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="customerId"
+                      >Customer ID</label
+                    >
+                    <input
+                      class="form-control"
+                      id="customerId"
+                      name="customerId"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="serviceName"
+                      >Service Name</label
+                    >
+                    <input
+                      class="form-control"
+                      id="serviceName"
+                      name="serviceName"
+                      placeholder="Engine Oil and Filter Change"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="description"
+                      >Service Description</label
+                    >
+                    <input
+                      class="form-control"
+                      id="description"
+                      name="description"
+                      placeholder="Routine maintenance and inspection"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="amount">Amount (UGX)</label>
+                    <input
+                      class="form-control"
+                      id="amount"
+                      name="amount"
+                      type="number"
+                      min="0"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="paymentMethod"
+                      >Payment Method</label
+                    >
+                    <select
+                      class="form-select"
+                      id="paymentMethod"
+                      name="paymentMethod"
+                    >
+                      <option value="MasterCard">MasterCard</option>
+                      <option value="Mtn Mobile Money">Mtn Mobile Money</option>
+                      <option value="Airtel Mobile Money">
+                        Airtel Mobile Money
+                      </option>
+                      <option value="QR">QR</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="status">Status</label>
+                    <select class="form-select" id="status" name="status">
+                      <option value="Paid">Paid</option>
+                      <option value="Pending">Pending</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    Save Payment
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">Recent payment activity</div>
+              <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table align-middle">
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Customer</th>
+                        <th>Method</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                      <tr>
+                        <td colspan="5" class="text-center text-muted">
+                          Loading payments...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/adminPayments.js" defer></script>
+  </body>
+</html>

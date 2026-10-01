@@ -5,20 +5,29 @@
   "license": "ISC",
   "author": "Mwesigwa Joshua",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "Routes/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Routes/index.js",
-    "dev": "nodemon Routes/index.js"
+    "start": "node Routes/server.js",
+    "dev": "nodemon Routes/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^5.1.0",
     "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "express-validator": "^7.0.1",
+    "mongoose": "^9.8.1",
+    "pug": "^3.0.4",
+    "serverless-http": "^3.2.0",
     "sqlite3": "^6.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
   },
-  "keywords": []
+  "keywords": [],
+  "allowScripts": {
+    "sqlite3@6.0.1": true
+  }
 }
